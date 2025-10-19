@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Skyzopedia — Modern API UI</title>
+  <meta name="description" content="Modern, responsive frontend for the Skyzopedia API project.">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/ui/styles.css">
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased">
+  <header class="bg-white shadow">
+    <div class="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="rounded-md bg-gradient-to-r from-indigo-500 to-cyan-400 p-2 text-white font-bold">SKY</div>
+        <div>
+          <h1 class="text-xl font-semibold">Skyzopedia</h1>
+          <p class="text-sm text-slate-500">Modern API & utilities</p>
+        </div>
+      </div>
+      <nav class="space-x-4 text-sm">
+        <a href="/docs" class="underline">Docs</a>
+        <a href="/ai" class="underline">AI Demos</a>
+        <a href="/portofolio" class="underline">Portfolio</a>
+        <a href="https://github.com" class="underline" target="_blank">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 py-12">
+    <section class="grid md:grid-cols-2 gap-8 items-center">
+      <div>
+        <h2 class="text-3xl font-extrabold mb-4">A clean, modern UI for your API</h2>
+        <p class="text-slate-600 mb-6">I created a responsive landing page and a small UI that links to your existing documentation and demos. It's lightweight and uses Tailwind CDN so you can preview immediately.</p>
+        <ul class="space-y-3">
+          <li>✅ Responsive layout</li>
+          <li>✅ Links to existing `/docs`, `/ai`, `/portofolio` folders</li>
+          <li>✅ Simple hero, features, and quick API test card</li>
+        </ul>
+        <div class="mt-6 flex gap-3">
+          <a href="#api-test" class="px-4 py-2 bg-indigo-600 text-white rounded shadow">Try API test</a>
+          <a href="/docs" class="px-4 py-2 border rounded">Open Docs</a>
+        </div>
+      </div>
+      <div>
+        <div class="bg-white p-6 rounded-xl shadow">
+          <h3 class="font-semibold text-lg mb-2">Quick API tester</h3>
+          <p class="text-sm text-slate-500 mb-4">Paste an endpoint path (e.g. <code class="bg-slate-100 px-1 rounded">/api/api.js</code>) and click Test to fetch. (CORS must be enabled by server - your index.js already sets CORS.)</p>
+          <div id="api-test" class="space-y-3">
+            <input id="endpoint" placeholder="/api" class="w-full border px-3 py-2 rounded" />
+            <div class="flex gap-3">
+              <button id="testBtn" class="px-4 py-2 bg-cyan-600 text-white rounded">Test</button>
+              <button id="clearBtn" class="px-4 py-2 border rounded">Clear</button>
+            </div>
+            <pre id="result" class="mt-3 p-3 bg-slate-100 rounded max-h-64 overflow-auto text-xs"></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mt-12 grid md:grid-cols-3 gap-6">
+      <div class="bg-white p-6 rounded-lg shadow">
+        <h4 class="font-semibold mb-2">Static Docs</h4>
+        <p class="text-sm text-slate-600">Your existing `/docs` folder is served. Keep writing markdown or HTML there.</p>
+      </div>
+      <div class="bg-white p-6 rounded-lg shadow">
+        <h4 class="font-semibold mb-2">AI Demos</h4>
+        <p class="text-sm text-slate-600">The `/ai` folder contains demo pages. They remain accessible.</p>
+      </div>
+      <div class="bg-white p-6 rounded-lg shadow">
+        <h4 class="font-semibold mb-2">Portfolio</h4>
+        <p class="text-sm text-slate-600">Your small portfolio is available at `/portofolio`.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-white border-t">
+    <div class="max-w-6xl mx-auto px-6 py-6 text-sm text-slate-500">
+      © Skyzopedia — Redesigned UI · Served by your existing Express server
+    </div>
+  </footer>
+
+<script>
+const testBtn = document.getElementById('testBtn');
+const clearBtn = document.getElementById('clearBtn');
+const endpointInput = document.getElementById('endpoint');
+const result = document.getElementById('result');
+
+testBtn.addEventListener('click', async () => {
+  const path = endpointInput.value.trim() || '/api';
+  result.textContent = 'Loading...';
+  try {
+    const res = await fetch(path);
+    const text = await res.text();
+    result.textContent = text;
+  } catch (e) {
+    result.textContent = 'Error: ' + e.message;
+  }
+});
+clearBtn.addEventListener('click', ()=>{ endpointInput.value=''; result.textContent=''; });
+</script>
+
+</body>
+</html>
