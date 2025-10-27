@@ -3,13 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title id="page">API FR3</title>
-  <meta name="description" content="API FR3 adalah lightweight API untuk WhatsApp Bots dengan performa cepat, stabil, dan mudah digunakan. Dukung pengembangan kami dengan donasi!">
-  <meta property="og:title" content="API FR3" />
-  <meta property="og:description" content="API FR3 adalah API ringan dan cepat untuk integrasi WhatsApp Bots. Cocok untuk developer yang butuh solusi efisien. Dukung kami dengan donasi untuk pengembangan lebih lanjut!" />
-  <meta property="og:image" content="https://img1.pixhost.to/images/7125/620815169_desta.jpg" />
-  <meta property="og:url" content="https://api.nvidiabotz.xyz/" />
-  <link id="icon" rel="icon" href="https://img1.pixhost.to/images/7125/620815169_desta.jpg" type="image/png">  
+  <title>API FR3 - Explorer</title>
+  <meta name="description" content="FR3 API Explorer - Fast, stable, and developer-friendly API for WhatsApp and AI bots.">
+  <link rel="icon" href="https://img1.pixhost.to/images/7125/620815169_desta.jpg" type="image/png">  
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
@@ -23,18 +19,320 @@
       --shadow-light: rgba(0, 0, 0, 0.1);
       --input-bg-light: #f1f5f9;
       --input-border-light: #cbd5e1;
-      --code-bg-light: #f8fafc;
-      --code-border-light: #e2e8f0;
       --success: #10b981;
       --danger: #ef4444;
-      --warning: #f59e0b;
       --info: #06b6d4;
-      --text-gray: #64748b;
-      --hover-bg: #f1f5f9;
-      --transition-speed: 0.2s ease-in-out;
     }
 
-    body.dark-theme {
+    body {
+      font-family: system-ui, sans-serif;
+      background-color: var(--background-light);
+      color: var(--text-light);
+      margin: 0;
+      transition: background .2s;
+    }
+
+    .navbar {
+      background: var(--card-bg-light);
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-light);
+      box-shadow: 0 2px 5px var(--shadow-light);
+      position: sticky;
+      top: 0;
+      z-index: 99;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--primary-light);
+      font-weight: bold;
+      font-size: 1.3rem;
+      text-decoration: none;
+    }
+
+    .category-list, .api-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      padding: 30px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .category, .api-card {
+      background: var(--card-bg-light);
+      border: 1px solid var(--border-light);
+      border-radius: 12px;
+      padding: 20px;
+      cursor: pointer;
+      transition: all .2s;
+      box-shadow: 0 2px 6px var(--shadow-light);
+    }
+
+    .category:hover, .api-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary-light);
+      box-shadow: 0 4px 12px var(--shadow-light);
+    }
+
+    h2 {
+      text-align: center;
+      margin-top: 40px;
+      color: var(--primary-light);
+    }
+
+    .hidden { display: none; }
+
+    .back-btn {
+      display: block;
+      margin: 10px auto 0;
+      background: var(--primary-light);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all .2s;
+    }
+
+    .back-btn:hover { background: #2563eb; transform: translateY(-2px); }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #64748b;
+      border-top: 1px solid var(--border-light);
+      margin-top: 60px;
+    }
+
+    .play-button {
+      background-color: var(--primary-light);
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all .2s;
+      margin-top: 10px;
+    }
+
+    .play-button:hover {
+      background: #2563eb;
+      transform: translateY(-2px);
+    }
+
+    /* Modal Style */
+    .modal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+      opacity: 0;
+      visibility: hidden;
+      transition: all .3s;
+    }
+    .modal.active { opacity: 1; visibility: visible; }
+
+    .modal-dialog {
+      background: var(--card-bg-light);
+      padding: 20px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 700px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-light);
+      padding-bottom: 10px;
+      margin-bottom: 15px;
+    }
+
+    .btn-close {
+      border: none;
+      background: none;
+      font-size: 1.4rem;
+      color: var(--danger);
+      cursor: pointer;
+    }
+
+    pre {
+      background: var(--input-bg-light);
+      padding: 10px;
+      border-radius: 8px;
+      font-family: monospace;
+      white-space: pre-wrap;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <header class="navbar">
+    <a href="#" class="brand"><i class="fas fa-code"></i> FR3 API Explorer</a>
+  </header>
+
+  <main>
+    <h2 id="sectionTitle">📚 API Categories</h2>
+
+    <div id="categoryContainer" class="category-list"></div>
+    <div id="endpointContainer" class="api-list hidden"></div>
+    <button id="backButton" class="back-btn hidden"><i class="fas fa-arrow-left"></i> Back to Categories</button>
+  </main>
+
+  <footer>
+    © <span id="year"></span> FR3 DEV - All rights reserved.
+  </footer>
+
+  <!-- Modal -->
+  <div id="apiModal" class="modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="modalTitle"></h3>
+        <button class="btn-close" id="closeModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p id="modalDesc"></p>
+        <pre id="modalPath"></pre>
+        <button class="play-button" id="tryButton"><i class="fas fa-paper-plane"></i> Try It</button>
+        <div id="responseOutput"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", async () => {
+    const categoryContainer = document.getElementById("categoryContainer");
+    const endpointContainer = document.getElementById("endpointContainer");
+    const backButton = document.getElementById("backButton");
+    const sectionTitle = document.getElementById("sectionTitle");
+    const modal = document.getElementById("apiModal");
+    const closeModal = document.getElementById("closeModal");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalDesc = document.getElementById("modalDesc");
+    const modalPath = document.getElementById("modalPath");
+    const tryButton = document.getElementById("tryButton");
+    const responseOutput = document.getElementById("responseOutput");
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    let endpoints = {};
+
+    // Fetch API endpoint list
+    try {
+      const res = await fetch("/endpoints");
+      endpoints = await res.json();
+    } catch (err) {
+      categoryContainer.innerHTML = "<p style='text-align:center;color:red;'>Failed to load endpoints.</p>";
+      console.error(err);
+      return;
+    }
+
+    // Render Category List
+    const renderCategories = () => {
+      sectionTitle.textContent = "📚 API Categories";
+      categoryContainer.classList.remove("hidden");
+      endpointContainer.classList.add("hidden");
+      backButton.classList.add("hidden");
+
+      categoryContainer.innerHTML = "";
+      Object.keys(endpoints).forEach(cat => {
+        const div = document.createElement("div");
+        div.className = "category";
+        div.innerHTML = `<h3>${cat}</h3><p>${endpoints[cat].length} endpoints</p>`;
+        div.addEventListener("click", () => renderEndpoints(cat));
+        categoryContainer.appendChild(div);
+      });
+    };
+
+    // Render Endpoint List of selected category
+    const renderEndpoints = (category) => {
+      sectionTitle.textContent = `📂 ${category} Endpoints`;
+      categoryContainer.classList.add("hidden");
+      endpointContainer.classList.remove("hidden");
+      backButton.classList.remove("hidden");
+
+      endpointContainer.innerHTML = "";
+      endpoints[category].forEach(api => {
+        const card = document.createElement("div");
+        card.className = "api-card";
+        card.innerHTML = `
+          <h4>${api.name}</h4>
+          <p>${api.desc || "No description"}</p>
+          <button class="play-button" data-path="${api.path}" data-name="${api.name}" data-desc="${api.desc}">
+            <i class="fas fa-arrow-right"></i> Try It
+          </button>
+        `;
+        endpointContainer.appendChild(card);
+      });
+    };
+
+    // Back button
+    backButton.addEventListener("click", renderCategories);
+
+    // Open Modal
+    document.body.addEventListener("click", (e) => {
+      if (e.target.classList.contains("play-button")) {
+        const btn = e.target.closest(".play-button");
+        const path = btn.dataset.path;
+        const name = btn.dataset.name;
+        const desc = btn.dataset.desc;
+
+        modalTitle.textContent = name;
+        modalDesc.textContent = desc;
+        modalPath.textContent = window.location.origin + path;
+        responseOutput.innerHTML = "";
+        modal.classList.add("active");
+
+        tryButton.onclick = async () => {
+          responseOutput.innerHTML = "Loading...";
+          try {
+            const response = await fetch(path.startsWith("/") ? path : "/" + path);
+            const type = response.headers.get("content-type");
+            if (type && type.includes("application/json")) {
+              const data = await response.json();
+              responseOutput.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            } else {
+              responseOutput.innerHTML = "<p>Response not JSON or empty.</p>";
+            }
+          } catch (err) {
+            responseOutput.innerHTML = `<p style="color:red;">Error: ${err.message}</p>`;
+          }
+        };
+      }
+    });
+
+    // Close Modal
+    closeModal.addEventListener("click", () => modal.classList.remove("active"));
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) modal.classList.remove("active");
+    });
+
+    // Initialize
+    renderCategories();
+  });
+  </script>
+</body>
+</html>    body.dark-theme {
       --background-light: #0f172a;
       --text-light: #f1f5f9;
       --primary-light: #60a5fa;
@@ -1783,3 +2081,4 @@
 </body>
 </html>
 "
+
